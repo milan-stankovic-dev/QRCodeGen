@@ -2,16 +2,11 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy solution and project files
-COPY *.sln .
-COPY QRCodeGen/*.csproj ./QRCodeGen/
+# Copy everything explicitly
+COPY QRCodeGen.csproj ./QRCodeGen.csproj
+RUN dotnet restore QRCodeGen.csproj
 
-# Restore dependencies
-RUN dotnet restore
-
-# Copy everything else and publish
 COPY . .
-WORKDIR /src/QRCodeGen
 RUN dotnet publish -c Release -o /app/publish
 
 # --- Stage 2: Run ---
